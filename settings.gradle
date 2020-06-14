@@ -1,0 +1,3 @@
+rootProject.name = 'KotlinLifeSuperProject'
+include 'LifeServer'
+include 'LifeClient'

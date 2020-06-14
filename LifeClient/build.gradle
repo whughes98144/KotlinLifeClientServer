@@ -1,0 +1,21 @@
+plugins {
+    id 'org.jetbrains.kotlin.js'
+}
+
+group 'com.willhughes'
+version '1.0-SNAPSHOT'
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+    implementation "org.jetbrains.kotlin:kotlin-stdlib-js"
+    testImplementation "org.jetbrains.kotlin:kotlin-test-js"
+}
+
+kotlin.target.browser {
+    distribution {
+        directory = new File("$projectDir/../out/production/static")
+    }
+}
