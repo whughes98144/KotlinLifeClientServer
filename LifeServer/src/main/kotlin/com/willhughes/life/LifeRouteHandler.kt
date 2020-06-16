@@ -1,19 +1,22 @@
 package com.willhughes.life
 
 import com.willhughes.rest.RouteHandler
-import com.willhughes.util.DeepJson
+import kotlinx.serialization.builtins.SetSerializer
+import kotlinx.serialization.json.Json
+import kotlinx.serialization.json.JsonConfiguration
 
-class LifeRouteHandler : RouteHandler () {
+class LifeRouteHandler : RouteHandler() {
 
     override fun initMap() {
-        routes.put("/generation/list", {
-                req, res: dynamic ->
-            res.end(DeepJson().toJson(WorldState.lives))
+        val json = Json(JsonConfiguration.Stable)
+        routes.put("/generation/list", { req, res: dynamic ->
+            val respStr = json.stringify(SetSerializer(Person.serializer()), WorldState.lives)
+            res.end(respStr)
         })
-        routes.put("/generation/next", {
-            req, res: dynamic ->
+        routes.put("/generation/next", { req, res: dynamic ->
             LifeRunner.runLife()
-            res.end(DeepJson().toJson(WorldState.lives))
+            val respStr = json.stringify(SetSerializer(Person.serializer()), WorldState.lives)
+            res.end(respStr)
         })
     }
 }

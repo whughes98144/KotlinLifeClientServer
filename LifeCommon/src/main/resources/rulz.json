@@ -1,0 +1,65 @@
+{
+  "numOfLives": 10,
+  "initialRun": 100,
+  "logLevel": 2,
+  "rulz": [
+    {
+      "title": "Everyone dies",
+      "conditional": "person.ifDies() ",
+      "action": "person.hasDied()",
+      "active": true
+    },
+    {
+      "title": "Persons over 21 without a spouse may get one",
+      "conditional": "person.age > 21 && person.spouse == null && Math.random() > .6",
+      "action": "person.gotMarried()",
+      "active": false
+    },
+    {
+      "title": "Associative mating",
+      "conditional": "person.age > 21 && person.spouse == null && Math.random() > .6",
+      "action": "person.associativeMating()",
+      "active": true
+    },
+    {
+      "title": "Couples may have children ",
+      "conditional": "person.spouse != null  && Math.random() < 1/(10*person.children.size+4)",
+      "action": "person.newChild() "
+    },
+    {
+      "title": "Jobs pay based upon age, education, (gender? race?)",
+      "conditional": "person.age>21 ",
+      "action": "person.salary += person.age*100; person.balance += person.salary"
+    },
+    {
+      "title": "Persons over 21 with a balance accrue interest",
+      "conditional": "person.balance > 0 && person.age > 21",
+      "action": "person.balance *= world.investmentReturn"
+    },
+    {
+      "title": "Room/board/etc costs money",
+      "conditional": "person.age > 21",
+      "action": "person.balance -= 2000 + person.balance/10000"
+    },
+    {
+      "title": "Health is fragile. Insufficient food/room/money decreases health",
+      "conditional": "person.age > 40",
+      "action": "person.health -= (5-person.educationLevel)*2"
+    },
+    {
+      "title": "Poor health leads to death",
+      "conditional": "person.health < 20 && Math.random()*100 < 100-(2*person.health)",
+      "action": "person.hasDied()"
+    },
+    {
+      "title": "",
+      "conditional": "",
+      "action": ""
+    },
+    {
+      "title": "",
+      "conditional": "",
+      "action": ""
+    }
+  ]
+}

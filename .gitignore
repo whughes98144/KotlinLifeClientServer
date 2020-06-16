@@ -1,2 +1,5 @@
 /LifeClient/build/
 /LifeServer/build/
+/.idea/
+/.gradle/
+/LifeCommon/build/

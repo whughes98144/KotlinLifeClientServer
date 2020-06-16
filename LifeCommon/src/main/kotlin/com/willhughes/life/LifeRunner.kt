@@ -23,18 +23,18 @@ object LifeRunner {
         Logger.noLogging = true
     }
 
-//    private fun runTimer(): () -> Unit {
-//        return {
-//            runLife()
-//            if (WorldState.lives.size == 0) {
-//                clearInterval(timerId)
-//            } else if (currentGeneration as Int > ConfigReader.jsonObj.initialRun as Int) {
-//                Logger.noLogging = false
-//                clearInterval(timerId)
-//                timerId = setInterval(runTimer(), DELAY)
-//            }
-//        }
-//    }
+    private fun runTimer(): () -> Unit {
+        return {
+            runLife()
+            if (WorldState.lives.size == 0) {
+                clearInterval(timerId)
+            } else if (currentGeneration as Int > ConfigReader.jsonObj.initialRun as Int) {
+                Logger.noLogging = false
+                clearInterval(timerId)
+                timerId = setInterval(runTimer(), DELAY)
+            }
+        }
+    }
 
     fun runLife() {
         currentGeneration++
