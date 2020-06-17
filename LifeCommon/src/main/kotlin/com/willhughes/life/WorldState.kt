@@ -7,7 +7,7 @@ object WorldState {
     var inflation: Double = 1.04
     var investmentReturn: Double = 1.06
     var unemploymentRate: Double = 1.04
-    val lives = HashSet<Person>()
+    val lives:MutableList<Person> = ArrayList<Person>()
     var year = 0;
 
     const val MAX_INFLATION = 8;

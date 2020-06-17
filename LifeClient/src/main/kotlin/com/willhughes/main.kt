@@ -1,12 +1,13 @@
 package com.willhughes
 
+import com.willhughes.life.Family
 import com.willhughes.life.Person
+import com.willhughes.web.fetch
 import kotlinx.serialization.builtins.SetSerializer
 import kotlinx.serialization.json.Json
 import kotlinx.serialization.json.JsonConfiguration
 import org.w3c.dom.Element
 import org.w3c.dom.events.Event
-import org.w3c.xhr.XMLHttpRequest
 import kotlin.browser.document
 
 external fun jq(id: String): dynamic
@@ -15,7 +16,7 @@ fun main() {
     drawTable()
     val button = document.getElementById("nextGenButton")
     button?.addEventListener("click", fun(event: Event) {
-        fetchNextGen()
+        fetchFamily()
     })
 }
 
@@ -42,23 +43,36 @@ fun drawTable() {
     val d3_kt: dynamic = js("d3.select(self.frameElement)")
     d3_kt.style("height", "600px")
 }
+fun fetchFamily() {
+    val json = Json(JsonConfiguration.Stable)
+    val url = "http://localhost:8010/family/list"
+    fetch(url, { response: String ->
+        val family = json.parse(Family.serializer(), response)
+        family.children.forEach {
+            logConsole("personChild is ${it.toString()}")
+        }
+    })
+
+}
 fun fetchNextGen() {
     val json = Json(JsonConfiguration.Stable)
     val url = "http://localhost:8010/generation/next"
-    val xmlHttp = XMLHttpRequest()
-    xmlHttp.open("GET", url)
-    xmlHttp.onload = {
-        if (xmlHttp.readyState == 4.toShort() && xmlHttp.status == 200.toShort()) {
-//            callback.invoke(xmlHttp.responseText)
-            val text = xmlHttp.responseText
-//            logConsole("Got response $text")
-            val personSet:Set<Person> = json.parse(SetSerializer(Person.serializer()), text)
-            personSet.forEach {
-                logConsole("person is ${it.toString()}")
-            }
+    fetch(url, { response: String ->
+        val personSet:Set<Person> = json.parse(SetSerializer(Person.serializer()), response)
+        personSet.forEach {
+            logConsole("person is ${it.toString()}")
         }
-    }
-    xmlHttp.send()
+    })
+//    val xmlHttp = XMLHttpRequest()
+//    xmlHttp.open("GET", url)
+//    xmlHttp.onload = {
+//        if (xmlHttp.readyState == 4.toShort() && xmlHttp.status == 200.toShort()) {
+//            callback.invoke(xmlHttp.responseText)
+//            val text = xmlHttp.responseText
+//            logConsole("Got response $text")
+//        }
+//    }
+//    xmlHttp.send()
 }
 
 fun logConsole(message: String) {

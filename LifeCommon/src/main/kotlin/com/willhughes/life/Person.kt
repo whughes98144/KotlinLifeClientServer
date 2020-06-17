@@ -53,7 +53,7 @@ open class Person(var gender: Gender, val fathersName: String?) {
 
     override fun toString(): String {
         var s =
-            "$id: $name: gender: $gender, age: $age, gen: $generation, health: $health, educ: $educationLevel, salary: $salary, balance: $balance, spouse: ${spouse?.name}, children: ${children.map{it.name}}, spouses: ${previousSpouses.map{it.name}}"
+            "$id: $name: gender: $gender, age: $age, gen: $generation, health: $health, educ: $educationLevel, salary: $salary, balance: $balance, spouse: ${spouseId}, children: ${childrenIds}, spouses: ${previousSpouseIds}"
         if (!alive) s = "\t( $s )"
         return s
     }
