@@ -71,10 +71,8 @@ class d3Graphing {
             }).transition(transition).style("fill-opacity", fun(d: dynamic): dynamic {
                 return if (d.parent == focus) 1 else 0;
             }).on("start", fun(d: dynamic, i: Int, nodes: dynamic) {
-                myThis = this
                 if (d.parent === focus) nodes[i].setAttribute("style","display: inline")
             }).on("end", fun(d: dynamic, i: Int, nodes: dynamic) {
-                myThis = this
                 if (d.parent !== focus) nodes[i].setAttribute("style","display: none")
             });
         }
