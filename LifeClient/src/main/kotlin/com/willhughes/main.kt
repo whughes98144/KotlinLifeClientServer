@@ -1,9 +1,7 @@
 package com.willhughes
 
-import com.willhughes.life.Family
-import com.willhughes.life.Person
+import com.willhughes.web.d3Graphing
 import com.willhughes.web.fetch
-import kotlinx.serialization.builtins.SetSerializer
 import kotlinx.serialization.json.Json
 import kotlinx.serialization.json.JsonConfiguration
 import org.w3c.dom.Element
@@ -12,10 +10,11 @@ import kotlin.browser.document
 
 external fun jq(id: String): dynamic
 fun main() {
-    fetchNextGen()
-    drawTable()
+    fetchFamily()
+//    drawTable()
     val button = document.getElementById("nextGenButton")
     button?.addEventListener("click", fun(event: Event) {
+        fetchNextGen()
         fetchFamily()
     })
 }
@@ -47,10 +46,12 @@ fun fetchFamily() {
     val json = Json(JsonConfiguration.Stable)
     val url = "http://localhost:8010/family/list"
     fetch(url, { response: String ->
-        val family = json.parse(Family.serializer(), response)
-        family.children.forEach {
-            logConsole("personChild is ${it.toString()}")
-        }
+//        val family = json.parse(Family.serializer(), response)
+        d3Graphing().circleGraph(JSON.parse(response))
+
+//        family.children.forEach {
+//            logConsole("personChild is ${it.toString()}")
+//        }
     })
 
 }
@@ -58,10 +59,10 @@ fun fetchNextGen() {
     val json = Json(JsonConfiguration.Stable)
     val url = "http://localhost:8010/generation/next"
     fetch(url, { response: String ->
-        val personSet:Set<Person> = json.parse(SetSerializer(Person.serializer()), response)
-        personSet.forEach {
-            logConsole("person is ${it.toString()}")
-        }
+//        val personSet:Set<Person> = json.parse(SetSerializer(Person.serializer()), response)
+//        personSet.forEach {
+//            logConsole("person is ${it.toString()}")
+//        }
     })
 //    val xmlHttp = XMLHttpRequest()
 //    xmlHttp.open("GET", url)

@@ -1,7 +1,6 @@
 package com.willhughes.life
 
 import kotlinx.serialization.Serializable
-import kotlinx.serialization.Transient
 
 @Serializable
 data class Family(
@@ -11,11 +10,8 @@ data class Family(
     var educationLevel: Double,
     var balance: Double,
     var generation: Int,
-    @Transient
     var children:List<Family> = ArrayList<Family>()
 ) {
-    var childrenIds: List<String> = ArrayList<String>()
-        get() = if (! field.isEmpty()) children.map{it.lastName} else field
 
     companion object Builder {
         var seen = HashSet<Int>()
@@ -25,24 +21,26 @@ data class Family(
         }
 
         fun buildFromWorld(people: List<Person>): List<Family> {
-            var familySet: MutableList<Family> = ArrayList<Family>()
+            val familySet: MutableList<Family> = ArrayList<Family>()
             for (person in people) {
                 if (!seen.contains(person.id)) {
                     seen.add(person.id)
                     var spouseName = ""
                     var educationLevel:Double = person.educationLevel.toDouble()
                     var balance = person.balance
+                    var name = formatName(person)
                     if (person.spouse != null) {
                         val spouse = person.spouse
-                        seen.add(spouse!!.id)
+                        name = "$name/${formatName(spouse!!)}"
+                        seen.add(spouse.id)
                         spouseName = spouse.name.last
                         educationLevel += spouse.educationLevel
                         educationLevel /= 2
-                        balance += spouse!!.balance
+                        balance += spouse.balance
                     }
                     if (person.children.size > 0) {
-                        var family = Family(
-                            person.name.last,
+                        val family = Family(
+                            name,
                             spouseName,
                             person.alive,
                             educationLevel,
@@ -52,8 +50,8 @@ data class Family(
                         family.children = buildFromWorld(person.children)
                         familySet.add(family);
                     } else {
-                        var family = Family(
-                            person.name.last,
+                        val family = Family(
+                            name,
                             spouseName,
                             person.alive,
                             educationLevel,
@@ -66,5 +64,7 @@ data class Family(
             }
             return familySet;
         }
+
+        private fun formatName(person: Person) = "${person.name.last},${person.name.first[0]}"
     }
 }

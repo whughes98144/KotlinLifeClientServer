@@ -106,10 +106,10 @@ open class Person(var gender: Gender, val fathersName: String?) {
     fun newChild() {
         Logger.log("\t${name} and ${spouse?.name} had a child! ");
         val child = Person(
-            1,
             if (Random.nextBoolean()) Gender.MALE else Gender.FEMALE,
-            if (gender == Gender.MALE) name.last else spouse?.name?.last
+            null
         )
+        child.age = 1
         child.generation = generation + 1
         randomSalary()
         val spouse = spouse

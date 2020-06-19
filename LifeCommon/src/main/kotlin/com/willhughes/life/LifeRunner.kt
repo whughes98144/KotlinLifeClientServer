@@ -28,7 +28,7 @@ object LifeRunner {
             runLife()
             if (WorldState.lives.size == 0) {
                 clearInterval(timerId)
-            } else if (currentGeneration as Int > ConfigReader.jsonObj.initialRun as Int) {
+            } else if (currentGeneration > ConfigReader.jsonObj.initialRun as Int) {
                 Logger.noLogging = false
                 clearInterval(timerId)
                 timerId = setInterval(runTimer(), DELAY)
