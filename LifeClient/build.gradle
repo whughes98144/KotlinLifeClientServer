@@ -21,4 +21,8 @@ kotlin.target.browser {
     distribution {
         directory = new File("$projectDir/../out/production/static")
     }
+//    dceTask {
+//        keep("ktor-ktor-io.\$\$importsForInline\$\$.ktor-ktor-io.io.ktor.utils.io")
+//    }
+//    runDceKotlinJs.dceOptions.devMode = true
 }
