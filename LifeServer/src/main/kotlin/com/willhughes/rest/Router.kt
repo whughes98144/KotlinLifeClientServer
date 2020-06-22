@@ -3,6 +3,7 @@ package com.willhughes.rest
 external val __dirname: dynamic
 external fun require(module: String): dynamic
 class Router(val routeHandler: RouteHandler) {
+    val PORT: Int = 8020
     init {
         var express = require("express");
         var app = express();
@@ -17,7 +18,7 @@ class Router(val routeHandler: RouteHandler) {
             println("adding route for $route")
             app.get(route, routeHandler.routes.get(route))
         }
-        var server = app.listen(8010, {
+        var server = app.listen(PORT, {
             println("Example app listening ")
         })
     }

@@ -1,5 +1,6 @@
 package com.willhughes.web
 
+import com.willhughes.logConsole
 import kotlin.math.log
 
 external val d3: dynamic
@@ -63,11 +64,19 @@ class d3Graphing {
                 val boolVal = d.parent === focus || nodes[i].setAttribute("style","display: inline")
                 return boolVal
             }).transition(transition).style("fill-opacity", fun(d: dynamic): dynamic {
-                return if (d.parent == focus) 1 else 0;
+                return if (d.parent === focus) 1 else 0;
             }).on("start", fun(d: dynamic, i: Int, nodes: dynamic) {
-                if (d.parent === focus) nodes[i].setAttribute("style","display: inline")
+                logConsole("start ${i} (${nodes[i]}) v (nope)")
+                if (d.parent === focus) {
+                    logConsole("start: d.parent == focus, setting to inline for ${i}")
+                    nodes[i].setAttribute("style","display: inline")
+                }
             }).on("end", fun(d: dynamic, i: Int, nodes: dynamic) {
-                if (d.parent !== focus) nodes[i].setAttribute("style","display: none")
+                logConsole("end ${i} (${nodes[i]}) ")
+//                if (d.parent !== focus) {
+                    logConsole("end d.parent == focus, setting to none for ${i}")
+                    nodes[i].setAttribute("style","display: none")
+//                }
             });
         }
 
@@ -91,7 +100,7 @@ class d3Graphing {
                 }).on("mouseout", fun () {
                     d3.select(d3.event.currentTarget).attr("stroke", null);
                 }).on("click", fun(d: dynamic) {
-                    if (focus !== d) {
+                    if (focus != d) {
                         zoom(d)
                         d3.event.stopPropagation()
                     }
@@ -100,9 +109,9 @@ class d3Graphing {
         label = svg.append("g").style("font", "10px sans-serif").attr("pointer-events", "none")
             .attr("text-anchor", "middle").selectAll("text").data(root.descendants()).join("text")
             .style("fill-opacity", fun(d: dynamic): dynamic {
-                return if (d.parent === root) 1 else 0
+                return if (d.parent == root) 1 else 0
             }).style("display", fun(d: dynamic): dynamic {
-                return if (d.parent === root) "inline" else "none"
+                return if (d.parent == root) "inline" else "none"
             }).text(fun(d: dynamic): dynamic {
                 return d.data.lastName
             });

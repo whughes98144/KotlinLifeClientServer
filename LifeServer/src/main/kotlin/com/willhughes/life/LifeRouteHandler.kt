@@ -19,7 +19,6 @@ class LifeRouteHandler : RouteHandler() {
             res.end(respStr)
         })
         routes.put("/family/list", { req, res: dynamic ->
-            println("family/list lives count ${WorldState.lives.size}")
             val respStr = json.stringify(Family.serializer(), Family.getRoot(WorldState.lives))
             res.end(respStr)
         })
