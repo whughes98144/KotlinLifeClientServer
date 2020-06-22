@@ -17,10 +17,10 @@ class D3Graphing {
         var node: dynamic = null
         var svg: dynamic = null
 
-        val color = d3.scaleLinear()
-            .domain(arrayOf(0, 5))
-            .range(arrayOf("hsl(152,80%,80%)", "hsl(228,30%,40%)"))
-            .interpolate(d3.interpolateHcl)
+//        val color = d3.scaleLinear()
+//            .domain(arrayOf(0, 5))
+//            .range(arrayOf("hsl(152,80%,80%)", "hsl(228,30%,40%)"))
+//            .interpolate(d3.interpolateHcl)
 
         fun pack(data: dynamic): Any {
             return d3.pack().size(arrayOf(width, height)).padding(3)(d3.hierarchy(data).sum(fun(d: dynamic): dynamic {
@@ -89,7 +89,7 @@ class D3Graphing {
             .attr("viewBox", "-${width / 2} -${height / 2} ${width} ${height}")
             .style("display", "block")
             .style("margin", "0 -14px")
-            .style("background", color(0))
+            .style("background", "white")
             .style("cursor", "pointer")
             .on("click", fun() { zoom(root) })
 
@@ -97,13 +97,14 @@ class D3Graphing {
             .selectAll("circle")
             .data(root.descendants().slice(1))
             .join("circle")
-            .attr("fill", fun(d: dynamic): String { return if (d.children) color(d.depth) else "white" })
+            .attr("fill", fun(d: dynamic): String { return if (!d.children) "#dddd" else "white" })
             .attr("pointer-events", fun(d: dynamic): String? { return if (!d.children) "none" else null })
+            .attr("stroke", fun(d: dynamic): String? { if (!d.children) return "none"  else return "#bbb"})
             .on("mouseover", fun() {
-                d3.event.currentTarget.setAttribute("stroke", "#000")
+                d3.event.currentTarget.setAttribute("stroke", if (d3.select(d3.event.currentTarget).children) "#ddd" else "#bbb" )
             })
             .on("mouseout", fun() {
-                d3.event.currentTarget.setAttribute("stroke", null)
+                d3.event.currentTarget.setAttribute("stroke", if (d3.select(d3.event.currentTarget).children) "#bbb" else "#ddd" )
             })
             .on("click", fun(d: dynamic) { if (focus !== d) {
                 zoom(d)
@@ -116,7 +117,7 @@ class D3Graphing {
         label = svg.append("g")
             .style("font", "14px sans-serif")
             .attr("pointer-events", "none")
-            .attr("text-anchor", "middle y=30")
+            .attr("text-anchor", "middle")
             .selectAll("text")
             .data(root.descendants())
             .join("text")
