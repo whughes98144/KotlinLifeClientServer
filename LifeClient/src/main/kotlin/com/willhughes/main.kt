@@ -1,6 +1,6 @@
 package com.willhughes
 
-import com.willhughes.web.d3Graphing
+import com.willhughes.web.D3Graphing
 import com.willhughes.web.fetch
 import kotlinx.serialization.json.Json
 import kotlinx.serialization.json.JsonConfiguration
@@ -22,7 +22,7 @@ fun fetchFamily() {
     val json = Json(JsonConfiguration.Stable)
     val url = "http://localhost:8010/family/list"
     fetch(url, { response: String ->
-        d3Graphing().circleGraph(JSON.parse(response))
+        D3Graphing().circleGraph(JSON.parse(response))
 
     })
 
